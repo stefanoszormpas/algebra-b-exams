@@ -80,6 +80,11 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']] }, output: { linebreaks: 
 
   function typeset() { if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([root]).catch(() => {}); else setTimeout(typeset, 300); }
   function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+  /* Μέσα στα \( \) τα < και > γίνονται \lt / \gt, για να μην τα διαβάσει ο browser ως HTML */
+  function mathSafe(s) { return String(s).replace(/\\\(([\s\S]*?)\\\)/g, (m, b) => '\\(' + b.replace(/</g, '\\lt ').replace(/>/g, '\\gt ') + '\\)'); }
+  (function () { const ex = (window.EXAMS || {})[new URLSearchParams(location.search).get('exam') || 'kef1']; if (!ex) return;
+    ex.themes.forEach(t => { if (t.intro) t.intro = mathSafe(t.intro); t.parts.forEach(p => { if (p.intro) p.intro = mathSafe(p.intro);
+      p.questions.forEach(q => { q.stem = mathSafe(q.stem); if (q.options) q.options = q.options.map(mathSafe); if (q.prefix) q.prefix = mathSafe(q.prefix); }); }); }); })();
   function allQuestions() { const out = []; EX.themes.forEach(t => t.parts.forEach(p => p.questions.forEach(q => out.push(q)))); return out; }
 
   if (!EX) { root.innerHTML = '<div class="card"><h2>Δεν βρέθηκε το διαγώνισμα.</h2></div>'; return; }
