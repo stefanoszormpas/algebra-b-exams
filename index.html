@@ -209,14 +209,14 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']] }, output: { linebreaks: 
       return;
     }
     const names = {}; EX.themes.forEach(t => t.parts.forEach(p => p.questions.forEach((q, i) => names[q.id] = p.label + (p.questions.length > 1 ? '.' + 'αβγδεζηθ'[i] : ''))));
-    const rows = (r.items || []).map(it => `<tr><td>${names[it.id] || it.id}</td><td class="${it.got === it.pts ? 'ok' : (it.got > 0 ? '' : 'bad')}">${it.got === it.pts ? '✓' : (it.got > 0 ? '½' : '✗')}</td><td>${it.got} / ${it.pts}</td></tr>`).join('');
+    const rows = (r.items || []).map(it => `<tr><td>${names[it.id] || it.id}</td><td class="${it.got === it.pts ? 'ok' : (it.got > 0 ? '' : 'bad')}">${it.got === it.pts ? '✓' : (it.got > 0 ? '½' : '✗')}</td><td>${String(it.got).replace('.', ',')} / ${it.pts}</td></tr>`).join('');
     root.innerHTML = `
       <div class="card">
         <h1>Η υποβολή ολοκληρώθηκε</h1>
         <div class="muted">${esc(S.name)}${S.tmima ? ' · ' + esc(S.tmima) : ''}</div>
         <div style="display:flex;gap:28px;align-items:baseline;margin:16px 0">
-          <div><div class="result-big">${r.score} / 100</div><div class="muted">μονάδες</div></div>
-          <div><div class="result-big">${r.grade20}</div><div class="muted">βαθμός στα 20</div></div>
+          <div><div class="result-big">${String(r.score).replace('.', ',')} / 100</div><div class="muted">μονάδες</div></div>
+          <div><div class="result-big">${String(r.grade20).replace('.', ',')}</div><div class="muted">βαθμός στα 20</div></div>
         </div>
         <p class="help">Τη λύση θα τη συζητήσουμε στην τάξη. Ο καθηγητής σου έλαβε τις απαντήσεις σου.</p>
       </div>
